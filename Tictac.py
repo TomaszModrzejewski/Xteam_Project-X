@@ -1,4 +1,4 @@
-board = [' ' for x in range(10)]
+board = [' ' for _ in range(10)]
 
 def insertLetter(letter,pos):
     board[pos] = letter
@@ -8,22 +8,19 @@ def spaceIsFree(pos):
 
 def printBoard(board):
     print('   |   |   ')
-    print(' ' + board[1] + ' | ' + board[2] + ' | ' + board[3])
+    print(f' {board[1]} | {board[2]} | {board[3]}')
     print('   |   |   ')
     print('------------')
     print('   |   |   ')
-    print(' ' + board[4] + ' | ' + board[5] + ' | ' + board[6])
+    print(f' {board[4]} | {board[5]} | {board[6]}')
     print('   |   |   ')
     print('------------')
     print('   |   |   ')
-    print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
+    print(f' {board[7]} | {board[8]} | {board[9]}')
     print('   |   |   ')
 
 def isBoardFull(board):
-    if board.count(' ') > 1:
-        return False
-    else:
-        return True
+    return board.count(' ') <= 1
 
 def IsWinner(b,l):
     return ((b[1] == l and b[2] == l and b[3] == l) or
@@ -65,12 +62,7 @@ def computerMove():
                 move = i
                 return move
 
-    cornersOpen = []
-    for i in possibleMoves:
-        if i in [1 , 3 , 7 , 9]:
-            cornersOpen.append(i)
-
-    if len(cornersOpen) > 0:
+    if cornersOpen := [i for i in possibleMoves if i in [1, 3, 7, 9]]:
         move = selectRandom(cornersOpen)
         return move
 
@@ -78,12 +70,7 @@ def computerMove():
         move = 5
         return move
 
-    edgesOpen = []
-    for i in possibleMoves:
-        if i in [2,4,6,8]:
-            edgesOpen.append(i)
-
-    if len(edgesOpen) > 0:
+    if edgesOpen := [i for i in possibleMoves if i in [2, 4, 6, 8]]:
         move = selectRandom(edgesOpen)
         return move
 
@@ -125,9 +112,8 @@ def main():
 
 while True:
     x = input("Do you want to play again? (y/n)")
-    if x.lower() == 'y':
-        board = [' ' for x in range(10)]
-        print('--------------------')
-        main()
-    else:
+    if x.lower() != 'y':
         break
+    board = [' ' for _ in range(10)]
+    print('--------------------')
+    main()

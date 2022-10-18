@@ -36,10 +36,26 @@ game_font=font.nametofont("TkFixedFont")
 game_font.config(size=10)
 
 score=0
-score_text=c.create_text(10,10,anchor="nw",font=game_font,fill="darkblue",text="Score :"+str(score))
+score_text = c.create_text(
+    10,
+    10,
+    anchor="nw",
+    font=game_font,
+    fill="darkblue",
+    text=f"Score :{score}",
+)
+
 
 lives_remaining=3
-lives_text=c.create_text(canvas_width-10,10, anchor="ne" ,font=game_font,fill="darkblue",text="Lives :"+str(lives_remaining))
+lives_text = c.create_text(
+    canvas_width - 10,
+    10,
+    anchor="ne",
+    font=game_font,
+    fill="darkblue",
+    text=f"Lives :{lives_remaining}",
+)
+
 
 eggs=[]
 
@@ -64,13 +80,13 @@ def egg_dropped(egg):
     c.delete(egg)
     lose_a_life()
     if lives_remaining==0:
-        messagebox.showinfo("Game Over!","Final Score:  "+str(score))
+        messagebox.showinfo("Game Over!", f"Final Score:  {str(score)}")
         root.destroy() 
 
 def lose_a_life():
     global lives_remaining
     lives_remaining=lives_remaining-1
-    c.itemconfigure(lives_text,text="Lives: "+str(lives_remaining))
+    c.itemconfigure(lives_text, text=f"Lives: {str(lives_remaining)}")
 
 
 def catch():
@@ -88,7 +104,7 @@ def increase_score(points):
     score=score+points
     egg_speed=int(egg_speed*difficulty)
     egg_interval=int(egg_speed*difficulty)
-    c.itemconfigure(score_text,text="Score :"+str(score))
+    c.itemconfigure(score_text, text=f"Score :{str(score)}")
 
 def mover(event):
     (x,y,x1,y1)=c.coords(catcher)

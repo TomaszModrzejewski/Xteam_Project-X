@@ -46,12 +46,12 @@ def index():
 
 		# generating unique name to save image
 		letters = string.ascii_lowercase
-		sname = ''.join(random.choice(letters) for i in range(10)) + '.png'
-		sfull_filename =  'uploads/' + sname
-		dname = ''.join(random.choice(letters) for i in range(10)) + '.png'
-		dfull_filename =  'uploads/' + dname
-		rname = ''.join(random.choice(letters) for i in range(10)) + '.png'
-		rfull_filename =  'uploads/' + rname
+		sname = ''.join(random.choice(letters) for _ in range(10)) + '.png'
+		sfull_filename = f'uploads/{sname}'
+		dname = ''.join(random.choice(letters) for _ in range(10)) + '.png'
+		dfull_filename = f'uploads/{dname}'
+		rname = ''.join(random.choice(letters) for _ in range(10)) + '.png'
+		rfull_filename = f'uploads/{rname}'
 
 		simg = Image.open(source_upload)
 		simg.save(os.path.join(app.config['INITIAL_FILE_UPLOADS'], sname))
@@ -73,60 +73,60 @@ def index():
 		# Face 1
 		faces = detector(img_gray)
 		for face in faces:
-		    landmarks = predictor(img_gray, face)
-		    landmarks_points = []
-		    for n in range(0, 68):
-		        x = landmarks.part(n).x
-		        y = landmarks.part(n).y
-		        landmarks_points.append((x, y))
+			landmarks = predictor(img_gray, face)
+			landmarks_points = []
+			for n in range(68):
+				x = landmarks.part(n).x
+				y = landmarks.part(n).y
+				landmarks_points.append((x, y))
 
-		    points = np.array(landmarks_points, np.int32)
-		    convexhull = cv2.convexHull(points)
-		    # cv2.polylines(img, [convexhull], True, (255, 0, 0), 3)
-		    cv2.fillConvexPoly(mask, convexhull, 255)
+			points = np.array(landmarks_points, np.int32)
+			convexhull = cv2.convexHull(points)
+			# cv2.polylines(img, [convexhull], True, (255, 0, 0), 3)
+			cv2.fillConvexPoly(mask, convexhull, 255)
 
-		    face_image_1 = cv2.bitwise_and(img, img, mask=mask)
+			face_image_1 = cv2.bitwise_and(img, img, mask=mask)
 
-		    # Delaunay triangulation
-		    rect = cv2.boundingRect(convexhull)
-		    subdiv = cv2.Subdiv2D(rect)
-		    subdiv.insert(landmarks_points)
-		    triangles = subdiv.getTriangleList()
-		    triangles = np.array(triangles, dtype=np.int32)
+			# Delaunay triangulation
+			rect = cv2.boundingRect(convexhull)
+			subdiv = cv2.Subdiv2D(rect)
+			subdiv.insert(landmarks_points)
+			triangles = subdiv.getTriangleList()
+			triangles = np.array(triangles, dtype=np.int32)
 
-		    indexes_triangles = []
-		    for t in triangles:
-		        pt1 = (t[0], t[1])
-		        pt2 = (t[2], t[3])
-		        pt3 = (t[4], t[5])
+			indexes_triangles = []
+			for t in triangles:
+			    pt1 = (t[0], t[1])
+			    pt2 = (t[2], t[3])
+			    pt3 = (t[4], t[5])
 
 
-		        index_pt1 = np.where((points == pt1).all(axis=1))
-		        index_pt1 = extract_index_nparray(index_pt1)
+			    index_pt1 = np.where((points == pt1).all(axis=1))
+			    index_pt1 = extract_index_nparray(index_pt1)
 
-		        index_pt2 = np.where((points == pt2).all(axis=1))
-		        index_pt2 = extract_index_nparray(index_pt2)
+			    index_pt2 = np.where((points == pt2).all(axis=1))
+			    index_pt2 = extract_index_nparray(index_pt2)
 
-		        index_pt3 = np.where((points == pt3).all(axis=1))
-		        index_pt3 = extract_index_nparray(index_pt3)
+			    index_pt3 = np.where((points == pt3).all(axis=1))
+			    index_pt3 = extract_index_nparray(index_pt3)
 
-		        if index_pt1 is not None and index_pt2 is not None and index_pt3 is not None:
-		            triangle = [index_pt1, index_pt2, index_pt3]
-		            indexes_triangles.append(triangle)
+			    if index_pt1 is not None and index_pt2 is not None and index_pt3 is not None:
+			        triangle = [index_pt1, index_pt2, index_pt3]
+			        indexes_triangles.append(triangle)
 
 		# Face 2
 		faces2 = detector(img2_gray)
 		for face in faces2:
-		    landmarks = predictor(img2_gray, face)
-		    landmarks_points2 = []
-		    for n in range(0, 68):
-		        x = landmarks.part(n).x
-		        y = landmarks.part(n).y
-		        landmarks_points2.append((x, y))
+			landmarks = predictor(img2_gray, face)
+			landmarks_points2 = []
+			for n in range(68):
+				x = landmarks.part(n).x
+				y = landmarks.part(n).y
+				landmarks_points2.append((x, y))
 
 
-		    points2 = np.array(landmarks_points2, np.int32)
-		    convexhull2 = cv2.convexHull(points2)
+			points2 = np.array(landmarks_points2, np.int32)
+			convexhull2 = cv2.convexHull(points2)
 		lines_space_mask = np.zeros_like(img_gray)
 		lines_space_new_face = np.zeros_like(img2)
 

@@ -59,20 +59,13 @@ def computerMove():
             boardcopy = board[:]
             boardcopy[i] = let
             if IsWinner(boardcopy, let):
-                move = i
-                return move
-
+                return i
     if cornersOpen := [i for i in possibleMoves if i in [1, 3, 7, 9]]:
-        move = selectRandom(cornersOpen)
-        return move
-
+        return selectRandom(cornersOpen)
     if 5 in possibleMoves:
-        move = 5
-        return move
-
+        return 5
     if edgesOpen := [i for i in possibleMoves if i in [2, 4, 6, 8]]:
-        move = selectRandom(edgesOpen)
-        return move
+        return selectRandom(edgesOpen)
 
 def selectRandom(li):
     import random
